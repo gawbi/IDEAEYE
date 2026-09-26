@@ -1,0 +1,20 @@
+# Phase 3-B: MONO 크롭 소분류 분류기 (33 클래스, 코드 기준). 2단계 구조의 2단계.
+name: cls_mono_effb0
+light: MONO
+label_col: cls                 # "state/state_detail"
+model: efficientnet_b0
+img_size: 256
+batch: 96
+epochs: 6
+lr: 0.0006
+weight_decay: 0.01
+label_smoothing: 0.05
+loss: weighted_ce              # ce | weighted_ce | focal | weighted_focal  (Phase 4 ablation 변수)
+preprocess: none               # none | clahe | unsharp | clahe+unsharp   (Phase 4/5 ablation 변수)
+train_cap_per_class: 12000     # 클래스당 학습 샘플 상한 (정상·먹통 등 다수 클래스 축소)
+val_max: 12000
+test_max: null                 # 전체 test
+workers: 8
+seed: 42
+group_cols: [washed, breed, region_code]
+index_csv: data/crops/index.csv

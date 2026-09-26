@@ -1,0 +1,28 @@
+# AI Hub 공식 수치 (CLAUDE.md 3.1 + 데이터 설명 페이지). 감사 스크립트가 실측과 비교한다.
+# 라벨이 숫자 코드라 class 이름 비교는 class_map 이 채워진 뒤에만 의미가 있다. share 는 코드→이름 추정의 참고용.
+MONO:
+  total_trays: 69616          # 구축 규모(판 기준). 다운로드본은 Training+Validation 만 포함 → 이보다 적을 수 있음
+  total_objects: 537213
+  state:
+    크랙: 56709
+    혈반: 66497
+  state_detail:
+    잠재파형크랙: 3930
+    미세크랙: 6931
+    먹통: 52412
+    혈반육반: 3714
+  state_share: {정상: 33, 이물질: 14, 크랙: 11, 탈색: 19, 기형: 11, 혈반: 12}   # %
+COLOR:
+  total_trays: 53933
+  total_objects: 512534
+  state:
+    크랙: 36547
+  state_detail: {}
+  state_share: {정상: 38, 크랙: 8, 이물질: 38, 탈색: 10, 외형이상: 6}
+STORAGE:
+  total_trays: 28807
+  total_objects: 331466
+  state: {}
+  state_detail: {}
+  state_share: {}
+  note: "보관기간 1~50일, 세척/비세척 50:50. CLAUDE.md 에 없던 세 번째 유형"

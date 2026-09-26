@@ -1,0 +1,21 @@
+# 후속: 정상(1) / 크랙(2) / 기타결함(9: 혈반·탈색·이물질·기형) 3클래스 — 라인 유입 분포에 가까운 음성 집합으로 파각 운영점 재확인
+name: cls_mono_3cls_effb0
+light: MONO
+label_col: label3
+label_map: {"1": "1", "2": "2", "default": "9"}
+model: efficientnet_b0
+img_size: 320
+batch: 64
+epochs: 8
+lr: 0.0006
+weight_decay: 0.01
+label_smoothing: 0.0
+loss: weighted_ce
+preprocess: none
+train_cap_per_class: 60000
+val_max: 12000
+test_max: null
+workers: 8
+seed: 42
+group_cols: [washed, breed, region_code]
+index_csv: data/crops/index.csv

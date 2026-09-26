@@ -1,0 +1,16 @@
+# group split 설정 (CLAUDE.md 설계 원칙 3: 같은 판·촬영일·지역코드가 분할 간에 섞이지 않게)
+# Phase 1 결과: COLOR 는 촬영일 5개·지역 2개, MONO 는 지역 32400 이 78% → connected 모드는 덩어리가 너무 커짐.
+# → 광원(MONO/COLOR/STORAGE)별로 따로, (촬영일, 지역코드) 조합을 그룹으로 하는 combined 모드. 판은 촬영일 안에 포함되어 자동 보호.
+group_keys: [date, region_code]
+group_mode: combined
+per_light: true                     # 광원별로 8:1:1 을 각각 맞춘다
+ratios: {train: 0.8, val: 0.1, test: 0.1}
+seed: 42
+class_field: cls                    # "state/state_detail" 코드 조합
+min_test_per_class: 100             # 희소 클래스 test 개수 경고 임계값
+# 목표 클래스 (코드 가설: configs/class_codes.yaml). test 개수를 별도 보고한다.
+target_classes:
+  MONO: {"2/*": 크랙(전체), "2/6": 잠재파형크랙, "2/8": 미세크랙, "3/1": 혈반육반, "3/5": 먹통}
+  COLOR: {"2/*": 크랙(전체)}
+records_cache: outputs/audit/records.pkl
+output: data/splits/aihub_split.csv          # 판 단위 (light, tray_id → split)

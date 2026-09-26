@@ -1,0 +1,13 @@
+# 선택 실험 큐: YOLO26n 비교 → 2클래스 B2 백본 → 표·취합 → GPU 리사이즈 벤치마크
+- name: det_yolo26n_mono
+  cmd: python scripts/train_det.py --config exp_det_y26 --resume
+- name: cls_crackbin_b2
+  cmd: python scripts/train_cls.py --config exp_cls_mono_crackbin_b2
+- name: ablation_table
+  cmd: python scripts/ablation_table.py --exps abl_mono_res320 abl_mono_clahe abl_mono_wfocal abl_mono_combined cls_mono_state_effb0 cls_mono_3cls_effb0 cls_mono_crackbin_effb0 cls_mono_crackbin_effb2
+- name: reject_policy
+  cmd: python scripts/reject_policy.py --exp latest:cls_mono_3cls_effb0 latest:cls_mono_effb0 latest:abl_mono_combined latest:cls_mono_state_effb0
+- name: bench_torch_gpu_resize
+  cmd: python scripts/export_and_benchmark.py --det C:/aihub_egg/runs/det_yolo11n_MONO/weights/best.pt --cls latest:cls_mono_crackbin_effb0 --light MONO --n 100 --cls-backend torch
+- name: collect_all
+  cmd: python scripts/collect_results.py

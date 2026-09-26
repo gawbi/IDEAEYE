@@ -1,0 +1,11 @@
+# 세션 끊김 후 재개 큐: auto_next 의 남은 작업
+- name: cls_mono_crackbin
+  cmd: python scripts/train_cls.py --config exp_cls_mono_crackbin
+- name: cls_color_wash
+  cmd: python scripts/train_cls.py --config exp_cls_color_wash
+- name: abl_combined
+  cmd: python scripts/train_cls.py --config exp_cls_mono --override img_size=320 batch=64 loss=weighted_focal name=abl_mono_combined
+- name: ablation_table
+  cmd: python scripts/ablation_table.py
+- name: collect_all
+  cmd: python scripts/collect_results.py

@@ -1,0 +1,58 @@
+# AI Hub 계란 데이터 코드 → 이름 매핑 **가설** (status: hypothesis)
+# 근거: 2026-09-23 감사(outputs/audit/report.md) 코드별 개수를 공식 수치(CLAUDE.md 3.1, 데이터 설명 페이지)와 대조.
+# 다운로드본(Training+Validation)은 공식 전체의 정확히 90% 이므로 "공식×0.9 ≈ 실측" 이면 일치로 본다.
+# 공식 코드표(데이터 설명서)로 확인되기 전까지 configs/data.yaml 의 class_map 에는 넣지 않는다 (CLAUDE.md 8장).
+status: hypothesis
+evidence_rule: "official * 0.9 == actual (±1%)"
+
+MONO:
+  state:
+    "1": {name: 정상,  evidence: "비율 33.1% ↔ 공식 33%", confidence: high}
+    "2": {name: 크랙,  evidence: "50,984 ↔ 56,709×0.9=51,038; 소분류 8종 ↔ 크랙 소분류 8종", confidence: high}
+    "3": {name: 혈반,  evidence: "59,871 ↔ 66,497×0.9=59,847; 비율 12.4% ↔ 12%", confidence: high}
+    "4": {name: 탈색,  evidence: "비율 18.8% ↔ 19%", confidence: high}
+    "5": {name: 이물질, evidence: "비율 14.4% ↔ 14%", confidence: high}
+    "6": {name: 기형,  evidence: "비율 10.8% ↔ 11% (크랙 11% 과 겹치지만 크랙은 state 2 로 확정)", confidence: high}
+  state_detail:
+    # 크랙(state 2) 소분류: CLAUDE.md 나열 순서(완전·일자형·원형·위아래·거미줄형·잠재파형·파형·미세)와 코드 순서가 일치한다고 가정.
+    # 6=잠재파형, 8=미세 두 개가 수치로 확인되어 순서 가정에 무게가 실림. 나머지 6개는 순서 추정.
+    "2/1": {name: 완전크랙,   count: 2641,  confidence: medium}
+    "2/2": {name: 일자형크랙, count: 15481, confidence: medium}
+    "2/3": {name: 원형크랙,   count: 4244,  confidence: medium}
+    "2/4": {name: 위아래크랙, count: 4709,  confidence: medium}
+    "2/5": {name: 거미줄형크랙, count: 3002, confidence: medium}
+    "2/6": {name: 잠재파형크랙, count: 3530, evidence: "3,930×0.9=3,537", confidence: high}
+    "2/7": {name: 파형크랙,   count: 11140, confidence: medium}
+    "2/8": {name: 미세크랙,   count: 6237,  evidence: "6,931×0.9=6,238", confidence: high}
+    # 혈반(state 3) 소분류 5종: 혈반육반·먹통은 수치 확인. 2/3/4 는 PROMPTS.md Phase 5 의 중앙기실·알끈·거품 중 하나로 추정(순서 미상).
+    "3/1": {name: 혈반육반, count: 3358,  evidence: "3,714×0.9=3,343; 2026-09-24 사용자 육안 확인(outputs/review/MONO_3-1.jpg)", confidence: confirmed}
+    "3/2": {name: "중앙기실?", count: 5112, evidence: "육안 추정(MONO_3-2.jpg): 끝·옆에 초승달형 어두운 공기집이 뚜렷, 위치 제각각", confidence: low}
+    "3/3": {name: "알끈?",   count: 2197, evidence: "육안 추정(MONO_3-3.jpg): 흐릿한 내부 그림자·점무늬, 소거법", confidence: low}
+    "3/4": {name: 거품(기포), count: 2092, evidence: "2026-09-24 사용자 육안 확인(MONO_3-4.jpg)", confidence: confirmed}
+    "3/5": {name: 먹통,     count: 47112, evidence: "52,412×0.9=47,171; 2026-09-24 사용자 육안 확인(MONO_3-5.jpg)", confidence: confirmed}
+    # 정상 4종 / 탈색 8종 / 이물질 4종 / 기형 4종: 이름 미상 (4+8+5+8+4+4 = 33 ↔ "소분류 33종" 일치)
+    "1/*": {name: "정상 소분류 4종 (이름 미상)", counts: {1: 56707, 2: 46201, 3: 44658, 4: 12280}}
+    "4/*": {name: "탈색 소분류 8종 (이름 미상)", counts: {1: 37411, 2: 1938, 3: 1730, 4: 22065, 5: 1930, 6: 9234, 7: 11223, 8: 5175}}
+    "5/*": {name: "이물질 소분류 4종 (이름 미상)", counts: {1: 1838, 2: 7263, 3: 37849, 4: 22694}}
+    "6/*": {name: "기형 소분류 4종 (이름 미상)", counts: {1: 17579, 2: 2294, 3: 11897, 4: 20200}}
+
+COLOR:
+  state:
+    "1": {name: 정상,    evidence: "38.2% ↔ 38%", confidence: high}
+    "2": {name: 크랙,    evidence: "32,955 ↔ 36,547×0.9=32,892", confidence: high}
+    "3": {name: 이물질,  evidence: "38.5% ↔ 38%", confidence: high}
+    "4": {name: 탈색,    evidence: "10.9% ↔ 10%", confidence: high}
+    "5": {name: 외형이상, evidence: "5.2% ↔ 6%", confidence: high}
+  state_detail: "COLOR 는 소분류 없음 (전부 0)"
+
+STORAGE:
+  state:
+    "7": {name: "보관기간 샘플 (상태 라벨 아님)", evidence: "보관기간 전체가 7, 소분류 0", confidence: high}
+
+meta:
+  type: {"1": MONO, "2": COLOR, "3": STORAGE}   # zip 구성과 1:1 대응
+  wash: "1/2 중 어느 쪽이 세척인지 미상. MONO 는 62,353:300 으로 사실상 단일, COLOR 31,635:16,843, 보관기간 13,123:12,802(공식 50:50)"
+  varieties: "1/2/3 ↔ 하이라인브라운·이사브라운·로만브라운라이트 (순서 미상)"
+  breeding_env: "2/3/4 (이름 미상)"
+  category: "전부 1 (MONO 410판은 결측)"
+  classification: "1/2 (의미 미상)"

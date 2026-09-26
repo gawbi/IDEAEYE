@@ -1,0 +1,10 @@
+[project]
+name = "egg-crack-candling"
+version = "0.0.1"
+description = "AI 기반 파각 검출 및 검란 시스템 (이데아아이)"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

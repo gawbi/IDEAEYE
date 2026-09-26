@@ -1,0 +1,15 @@
+# Phase 3-C: 크랙 전용 이상탐지 (정상 크롭만 학습 → 크랙 크롭 검출), MONO
+name: patchcore_mono
+light: MONO
+backbone: wide_resnet50_2
+layers: [2, 3]
+proj_dim: 256
+coreset_ratio: 0.1
+img_size: 224
+n_normal_train: 1500          # 메모리 뱅크용 정상(state 1) train 크롭 수
+n_normal_test: 6000           # test 정상 크롭 수 (음성)
+n_crack_test: null            # null = test 크랙 전부 (양성)
+batch: 32
+workers: 6
+seed: 42
+index_csv: data/crops/index.csv

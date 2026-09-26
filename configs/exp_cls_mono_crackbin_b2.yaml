@@ -1,0 +1,21 @@
+# 선택 실험: 크랙 vs 정상 2클래스, 백본 EfficientNet-B2 (B0 대비 운영점 개선 여부)
+name: cls_mono_crackbin_effb2
+light: MONO
+label_col: state
+class_filter: ["1/", "2/"]
+model: efficientnet_b2
+img_size: 320
+batch: 48
+epochs: 8
+lr: 0.0005
+weight_decay: 0.01
+label_smoothing: 0.0
+loss: weighted_ce
+preprocess: none
+train_cap_per_class: 50000
+val_max: 12000
+test_max: null
+workers: 8
+seed: 42
+group_cols: [washed, breed, region_code]
+index_csv: data/crops/index.csv

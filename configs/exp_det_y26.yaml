@@ -1,0 +1,13 @@
+# 선택 실험: YOLO26n 검출기 (YOLO11n 과 동일 조건 비교, MONO)
+name: det_yolo26n
+model: yolo26n.pt
+imgsz: 640
+epochs: 25
+patience: 8
+batch: 16
+workers: 8
+seed: 42
+project: C:/aihub_egg/runs
+lights: [MONO]
+det_root: C:/aihub_egg/det
+amp: true

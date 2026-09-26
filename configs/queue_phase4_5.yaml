@@ -1,0 +1,17 @@
+# Phase 4 ablation (한 번에 한 변수) + Phase 5 검란. python scripts/run_queue.py configs/queue_phase4_5.yaml
+- name: fn_analysis_baseline
+  cmd: python scripts/fn_analysis.py --exp latest:cls_mono_effb0
+- name: abl_res320
+  cmd: python scripts/train_cls.py --config exp_cls_mono --override img_size=320 batch=64 name=abl_mono_res320
+- name: abl_clahe
+  cmd: python scripts/train_cls.py --config exp_cls_mono --override preprocess=clahe name=abl_mono_clahe
+- name: abl_focal
+  cmd: python scripts/train_cls.py --config exp_cls_mono --override loss=weighted_focal name=abl_mono_wfocal
+- name: candling_none
+  cmd: python scripts/train_cls.py --config exp_cls_candling --override name=cls_candling_none
+- name: candling_clahe
+  cmd: python scripts/train_cls.py --config exp_cls_candling --override preprocess=clahe name=cls_candling_clahe
+- name: candling_unsharp
+  cmd: python scripts/train_cls.py --config exp_cls_candling --override preprocess=unsharp name=cls_candling_unsharp
+- name: candling_confusion
+  cmd: python scripts/candling_confusion.py --exp latest:cls_candling_none latest:cls_candling_clahe latest:cls_candling_unsharp latest:cls_mono_effb0

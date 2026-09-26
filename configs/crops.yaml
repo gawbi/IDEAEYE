@@ -1,0 +1,10 @@
+# Phase 2: 계란 크롭 생성 (zip 에서 직접 읽어 bbox 여백 10% 크롭)
+out_root: data/crops
+margin: 0.10               # bbox 사방 여백 비율
+long_side: 320             # 긴 변 픽셀. bbox 중앙값 230×293 → 여백 포함 ~253×322 → 거의 원본 해상도 유지
+jpeg_quality: 95
+lights: [MONO, COLOR]      # STORAGE 는 목표 아님 (필요 시 추가)
+workers: 16                # 최대 병렬 (CPU 16)
+records_cache: outputs/audit/records.pkl
+split_csv: data/splits/aihub_split.csv
+index_csv: data/crops/index.csv

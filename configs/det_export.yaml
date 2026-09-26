@@ -1,0 +1,8 @@
+# Phase 3-A: 판 이미지 검출기(YOLO) 데이터셋 추출 (zip → 짧은 경로에 이미지 복사 + YOLO 라벨)
+out_root: C:/aihub_egg/det          # Ultralytics 는 짧은 경로가 안전 (Windows 260자)
+seed: 42
+workers: 8
+class_field: state                  # 대분류 코드 → 클래스 (AI Hub DETR 베이스라인과 비교용). 위치 검출에도 그대로 사용
+per_light:                          # 분할별 판 수 (전체 62k/48k 는 학습 시간 과다 → 서브샘플)
+  MONO: {train: 8000, val: 1000, test: 2000}
+  COLOR: {train: 6000, val: 1000, test: 1500}

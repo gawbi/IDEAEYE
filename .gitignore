@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+data/**
+!data/**/.gitkeep
+outputs/**
+!outputs/.gitkeep
+experiments/**
+!experiments/.gitkeep
+!experiments/SUMMARY.md
+models/
+*.engine
+*.onnx
+*.pt
+검수/

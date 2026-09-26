@@ -1,0 +1,37 @@
+# 전체 GPU 작업 큐 (순차, GPU 공유 금지). python scripts/run_queue.py configs/queue_all.yaml
+# Phase 3
+- name: det_mono_color
+  cmd: python scripts/train_det.py --config exp_det --resume
+- name: cls_mono
+  cmd: python scripts/train_cls.py --config exp_cls_mono
+- name: cls_color
+  cmd: python scripts/train_cls.py --config exp_cls_color
+- name: patchcore_mono
+  cmd: python scripts/train_patchcore.py --config exp_patchcore_mono
+- name: candling_threshold
+  cmd: python scripts/candling_threshold.py
+- name: collect_phase3
+  cmd: python scripts/collect_results.py
+# Phase 4 (한 번에 한 변수)
+- name: fn_analysis_baseline
+  cmd: python scripts/fn_analysis.py --exp latest:cls_mono_effb0
+- name: abl_res320
+  cmd: python scripts/train_cls.py --config exp_cls_mono --override img_size=320 batch=64 name=abl_mono_res320
+- name: abl_clahe
+  cmd: python scripts/train_cls.py --config exp_cls_mono --override preprocess=clahe name=abl_mono_clahe
+- name: abl_focal
+  cmd: python scripts/train_cls.py --config exp_cls_mono --override loss=weighted_focal name=abl_mono_wfocal
+# Phase 5 검란
+- name: candling_none
+  cmd: python scripts/train_cls.py --config exp_cls_candling --override name=cls_candling_none
+- name: candling_clahe
+  cmd: python scripts/train_cls.py --config exp_cls_candling --override preprocess=clahe name=cls_candling_clahe
+- name: candling_unsharp
+  cmd: python scripts/train_cls.py --config exp_cls_candling --override preprocess=unsharp name=cls_candling_unsharp
+- name: candling_confusion
+  cmd: python scripts/candling_confusion.py --exp latest:cls_candling_none latest:cls_candling_clahe latest:cls_candling_unsharp latest:cls_mono_effb0
+# Phase 7
+- name: benchmark_mono
+  cmd: python scripts/export_and_benchmark.py --det C:/aihub_egg/runs/det_yolo11n_MONO/weights/best.pt --cls latest:cls_mono_effb0 --light MONO --n 100
+- name: collect_all
+  cmd: python scripts/collect_results.py

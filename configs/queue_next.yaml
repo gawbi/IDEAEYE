@@ -1,0 +1,9 @@
+# TODO B 항목: 배치 추론 벤치마크(2클래스 모델) → 3클래스 분류기
+- name: benchmark_crackbin_batched
+  cmd: python scripts/export_and_benchmark.py --det C:/aihub_egg/runs/det_yolo11n_MONO/weights/best.pt --cls latest:cls_mono_crackbin_effb0 --light MONO --n 100
+- name: cls_mono_3cls
+  cmd: python scripts/train_cls.py --config exp_cls_mono_3cls
+- name: ablation_table
+  cmd: python scripts/ablation_table.py --exps abl_mono_res320 abl_mono_clahe abl_mono_wfocal abl_mono_combined cls_mono_state_effb0 cls_mono_crackbin_effb0 cls_mono_3cls_effb0
+- name: collect_all
+  cmd: python scripts/collect_results.py

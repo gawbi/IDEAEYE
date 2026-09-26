@@ -1,0 +1,20 @@
+# COLOR 세척여부 비교 전용 (판 단위 층화 분할, 촬영일 누수 허용 → KPI 로 쓰지 않음)
+name: cls_color_washsplit_effb0
+light: COLOR
+label_col: cls
+model: efficientnet_b0
+img_size: 256
+batch: 96
+epochs: 6
+lr: 0.0006
+weight_decay: 0.01
+label_smoothing: 0.05
+loss: weighted_ce
+preprocess: none
+train_cap_per_class: 25000
+val_max: 12000
+test_max: 30000
+workers: 8
+seed: 42
+group_cols: [washed, breed, region_code, date]
+index_csv: data/crops/index_color_wash.csv

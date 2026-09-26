@@ -1,0 +1,13 @@
+# Phase 3-A: 판 이미지 YOLO11 검출기 (대분류 코드 클래스). AI Hub DETR mAP@0.5 0.53/0.54 와 비교.
+name: det_yolo11n
+model: yolo11n.pt          # 사전학습 가중치 자동 다운로드
+imgsz: 640
+epochs: 25
+patience: 8
+batch: 16
+workers: 8
+seed: 42
+project: C:/aihub_egg/runs  # Ultralytics 출력 (짧은 경로)
+lights: [MONO, COLOR]
+det_root: C:/aihub_egg/det
+amp: true

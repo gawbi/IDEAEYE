@@ -1,0 +1,7 @@
+# 3클래스 학습 뒤 이어서: 분류기 백엔드별 지연 비교 (2클래스 모델)
+- name: bench_onnx_fixed16
+  cmd: python scripts/export_and_benchmark.py --det C:/aihub_egg/runs/det_yolo11n_MONO/weights/best.pt --cls latest:cls_mono_crackbin_effb0 --light MONO --n 100 --cls-backend onnx --fixed-batch 16
+- name: bench_torch_fp16
+  cmd: python scripts/export_and_benchmark.py --det C:/aihub_egg/runs/det_yolo11n_MONO/weights/best.pt --cls latest:cls_mono_crackbin_effb0 --light MONO --n 100 --cls-backend torch
+- name: collect_all
+  cmd: python scripts/collect_results.py

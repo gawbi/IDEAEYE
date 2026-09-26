@@ -1,0 +1,12 @@
+# Python 3.10 (CLAUDE.md 는 3.11 명시 — 현 환경 3.10.9, 코드는 3.10 호환)
+numpy
+pillow
+pyyaml
+pytest
+opencv-python
+pandas
+tabulate            # pandas.to_markdown
+matplotlib
+roboflow            # 보조 데이터 다운로드
+# Phase 3 이후 (추가 전 확인 요청 — CLAUDE.md 7장)
+# torch, ultralytics, timm, anomalib, onnx, onnxruntime-gpu

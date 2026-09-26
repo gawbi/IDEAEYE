@@ -1,0 +1,26 @@
+# 엣지 추론 서비스 설정 (Phase 7에서 실제 값으로 채움)
+device: cuda:0                 # 대상 장비 미정 (CLAUDE.md 2장)
+detector:
+  weights: models/detector.engine      # 계란 위치 검출 (판 이미지 → bbox)
+  conf_threshold: 0.3
+classifier:
+  weights: models/classifier.engine    # 크롭 분류 (소분류)
+  input_size: 224
+  crop_margin: 0.10                    # bbox 여백 10%
+decision:
+  crack_threshold: 0.5                 # 운영점: 파각 Recall 목표 기준으로 재설정
+  reject_classes: [크랙, 혈반, 이물질, 기형]
+plc:
+  backend: mock                        # mock | modbus_tcp
+  host: 192.168.0.10
+  port: 502
+  heartbeat_interval_s: 1.0
+  timeout_s: 0.5
+safety:
+  on_model_load_fail: reject_all       # reject_all | stop_line
+  on_camera_lost: stop_line
+  on_plc_lost: stop_line
+logging:
+  root: outputs/infer_logs
+  save_images: true
+  max_latency_ms: 0                    # KPI 미정, 0 이면 경고 비활성

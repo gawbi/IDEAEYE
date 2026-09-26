@@ -1,0 +1,66 @@
+# 데이터 경로·좌표계·XML 스키마 설정
+# 2026-09-23: 실제 AI Hub XML(zip 내부) 확인 후 태그를 실제 값으로 갱신. 클래스 코드표는 아직 없음.
+
+paths:
+  aihub_root: C:/aihub_egg/labels          # 라벨 XML 만 풀어 둔 곳 (짧은 경로: Windows 260자 제한 회피)
+  aihub_zip_root: "C:/Users/user/Downloads/248.계란 데이터/01-1.정식개방데이터"   # 이미지 zip (풀지 않고 직접 읽음)
+  own_root: data/own
+  crops_root: data/crops
+  roboflow_root: data/roboflow
+  audit_out: outputs/audit
+
+image_exts: [".jpg", ".jpeg", ".png"]
+image_source: both        # dir | zip | both  — 판 이미지를 어디서 읽을지
+image_zip_glob: "*/01.원천데이터/*.zip"   # aihub_zip_root 기준
+
+# bbox 좌표계. AI Hub 문서는 x_min,y_min 을 "좌하단"으로 표기.
+# outputs/audit/bbox_*.jpg 시각화로 확정하기 전까지 top_left + verified=false.
+coords:
+  origin: top_left
+  verified: true
+  note: "2026-09-23 확정. 근거: outputs/audit/bbox_MONO_0608113702_0_09593.jpg (비대칭 배치, top_left 만 계란과 일치), bbox_COLOR_20221007-13872.jpg, bbox_STORAGE_20220721172735_1_00140.jpg. 문서의 '좌하단' 표기는 오기"
+
+# 광원 구분. 실제 XML 의 type 코드 → 이름 (1/2/3 은 zip 구성(MONO/COLOR/보관기간)과 대응하는 것으로 추정, 코드표로 확인)
+light_from: [meta, path, filename]
+light_codes: {"1": MONO, "2": COLOR, "3": STORAGE}
+
+# 실제 XML 구조 (평면 <annotation>, 객체는 <bndbox> 요소)
+xml_schema:
+  filename: ["file_name", "filename"]
+  width: ["size/width"]
+  height: ["size/height"]
+  object: ["bndbox"]
+  object_fields:
+    name: ["object"]            # 계란 객체 ID (MONO↔COLOR 매칭 키 후보)
+    seq: ["seq"]
+    state: ["state"]            # 대분류 코드
+    state_detail: ["state_detail"]   # 소분류 코드
+    x_min: ["x_min"]
+    y_min: ["y_min"]
+    x_max: ["x_max"]
+    y_max: ["y_max"]
+  meta_fields:
+    light: ["type"]
+    category: ["category"]
+    classification: ["classification"]
+    region_code: ["regional_code"]
+    breed: ["varieties"]
+    washed: ["wash"]
+    days: ["days"]
+    fresh_day: ["fresh_day"]
+    create_date: ["create_date"]
+    datetime: ["date"]
+    temperature: ["temperature"]
+    humidity: ["humidity"]
+    farming_env: ["breeding_env"]
+    object_count: ["object_count"]
+
+tray_id_from: filename_stem
+
+# 코드 → 이름 매핑. AI Hub 데이터 설명서 코드표 확인 후 채운다 (추측 금지, CLAUDE.md 8장).
+class_map:
+  state: {}
+  state_detail: {}
+  washed: {}
+  breed: {}
+  farming_env: {}

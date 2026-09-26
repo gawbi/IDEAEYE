@@ -1,0 +1,10 @@
+# GPU 작업 큐 (순차). python scripts/run_queue.py configs/queue_phase3.yaml
+# (검출기 학습 det_yolo11n 은 크롭 생성과 무관하므로 별도 백그라운드로 먼저 실행)
+- name: cls_mono
+  cmd: python scripts/train_cls.py --config exp_cls_mono
+- name: cls_color
+  cmd: python scripts/train_cls.py --config exp_cls_color
+- name: patchcore_mono
+  cmd: python scripts/train_patchcore.py --config exp_patchcore_mono
+- name: candling_threshold
+  cmd: python scripts/candling_threshold.py

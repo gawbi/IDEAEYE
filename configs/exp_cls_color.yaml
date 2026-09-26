@@ -1,0 +1,20 @@
+# Phase 3-B: COLOR 크롭 대분류 분류기 (5 클래스: 정상·크랙·이물질·탈색·외형이상 코드). 세척여부별 성능 비교용.
+name: cls_color_effb0
+light: COLOR
+label_col: cls                 # COLOR 는 소분류 없음 → "state/0"
+model: efficientnet_b0
+img_size: 256
+batch: 96
+epochs: 6
+lr: 0.0006
+weight_decay: 0.01
+label_smoothing: 0.05
+loss: weighted_ce
+preprocess: none
+train_cap_per_class: 25000
+val_max: 12000
+test_max: null
+workers: 8
+seed: 42
+group_cols: [washed, breed, region_code]
+index_csv: data/crops/index.csv
