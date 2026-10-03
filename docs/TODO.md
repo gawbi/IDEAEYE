@@ -11,7 +11,8 @@ Claude 는 깨어날 때마다 이 파일을 읽고 위에서부터 "할 수 있
 - [x] 3클래스(정상/크랙/기타) 분류기 + 배출 정책 시뮬레이션 (`docs/reject_policy.md`): 크랙만 기준 12.3%, 모든 결함 95% 배출 시 정상 오배출 33% → 정책 결정 필요
 - [x] 파형크랙(2/7) FN 격자 (`검수/06_미검출_파형크랙/`): 미검출은 단일 시점에서 균열이 안 보임 → 다중 프레임 촬영 권고
 - [x] 배치 추론: ORT 동적 배치 악화 원인(형태 변경 시 cuDNN 재탐색) 규명, PyTorch FP16 + GPU 정규화로 분류 66 → 24 ms/판, 계란당 2.8 ms
-- [x] 문서: phase1/3/4/5/6/7, final_summary, reject_policy, RESULTS.md, CLAUDE.md 진행 현황, 검수 폴더 01~06
+- [x] 문서: phase1/3/4/5/6/7, final_summary, reject_policy, RESULTS.md, CLAUDE.md 진행 현황, 검수 폴더 01~08
+- [x] 2026-09-26: 로보플로우 sanity check(AUROC 0.901, 임계값 재조정 필요), 데모 추론 도구(`scripts/demo_infer.py`, 검수/07), 데이터 수집 요청서(`docs/data_collection_request.md`, 검수/08), git 초기화(휴대용 MinGit `C:\tools\mingit`, 사용자 PATH 등록)
 
 ## B. 다음에 Claude 가 할 일 (사용자 결정 후 또는 선택)
 - [ ] (정책 확정 후) 정책 기준 운영점 최종표 + 판정 규칙을 `configs/infer.yaml decision` 에 반영, 2클래스+33클래스 이중 헤드 파이프라인 어댑터
@@ -31,7 +32,7 @@ Claude 는 깨어날 때마다 이 파일을 읽고 위에서부터 "할 수 있
 - [!] `검수/06` 파형크랙 미검출 격자 육안 확인 결과
 - [!] (선택) AI Hub 제공 DETR 모델 파일 → `models/aihub/`
 - [!] 자사 라인 데이터 (`data/own/`, 세척/비세척을 같은 세션에 혼합 촬영), 추론 장비·PLC 기종
-- [!] git 저장소 초기화 허가
+- [x] git 저장소 초기화 (2026-09-26 완료, 커밋 2건)
 
 ## D. 규칙
 - GPU 작업은 반드시 하나의 큐(`scripts/run_queue.py`)로만 실행. 병렬 GPU 사용 금지 (cuDNN 오류 경험).
