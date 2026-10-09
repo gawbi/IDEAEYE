@@ -13,3 +13,11 @@ models/
 *.onnx
 *.pt
 검수/
+# 기업 제공 영상·사진·관찰 기록 (외부 공유 금지)
+docs/private/
+*.mkv
+*.mp4
+*.avi
+*.mov
+.venv/
+*.sqlite3

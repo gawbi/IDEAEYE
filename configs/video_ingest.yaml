@@ -1,0 +1,21 @@
+# 기기 영상 → 계란 크롭 데이터셋 (docs/field_info.md 4절)
+# 녹화본에 카메라 화면이 여러 개 배치된 경우 화면을 분리한 뒤 화면마다 고정 자리 ROI 를 잡는다
+out_root: data/own/frames
+analysis_stride: 2            # 모션 분석 시 n 프레임마다 1장 (60fps → 30fps 분석)
+analysis_scale: 0.25          # 모션 분석용 축소 비율
+content_threshold: 12         # 검은 여백 판정 밝기 (0~255)
+panes: 2                      # 화면 개수 (세로 배치)
+pane_layout: vertical         # vertical | horizontal
+rois_per_pane: 3              # 화면당 계란 자리 수
+roi_margin: 0.12              # ROI 여백 비율
+roi_min_area_frac: 0.02       # 화면 면적 대비 ROI 최소 면적 (잡음 제거)
+roi_override: null            # 수동 지정 시 [[pane, x1, y1, x2, y2], ...] (화면 내부 좌표)
+motion_threshold: 1.0         # 화면별 평균 절대 프레임차(0~255). 샘플 영상: 정지 ≈0.3, 회전 ≈2, 계란 교체 3~6
+min_static_sec: 0.2           # 최소 정지 구간 길이
+max_segments: null            # 테스트용 상한
+glow_v_min: 170               # 계란 투광 빛 판정: 밝기 하한
+glow_s_min: 60                # 채도 하한 (주황/황색 투광)
+glow_v_white: null            # 아주 밝은 흰색도 계란으로 볼지 (흰 기계 부품이 섞여 기본 null=비활성; 백색란이 포화되면 240 등으로 설정)
+present_min_frac: 0.12        # ROI 안 빛 픽셀 비율이 이 값 이상이면 계란 있음
+keep_empty: false             # 계란 없는 크롭 저장 여부
+jpeg_quality: 95

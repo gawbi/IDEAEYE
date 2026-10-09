@@ -206,10 +206,12 @@ def train_classifier(cfg: dict[str, Any], index_csv: Path, out_dir: Path, device
     df = load_index(index_csv, light, label_col)
     if cfg.get("class_filter"):  # 예: 혈반 소분류만 ("3/") — 필터는 항상 cls(소분류 코드) 기준
         df = df[df["cls"].str.startswith(tuple(cfg["class_filter"]))]
-    if cfg.get("label_map"):  # state 코드 → 새 라벨 (예: {"1": "1", "2": "2", "default": "9"} = 정상/크랙/기타)
+    if cfg.get("label_map"):  # 코드 → 새 라벨 (기본 state 기준; label_map_col 로 state_detail/cls 등 지정 가능. "drop" 값은 제외)
         lm = {str(k): str(v) for k, v in cfg["label_map"].items()}
+        src_col = cfg.get("label_map_col", "state")
         df = df.copy()
-        df[label_col] = df["state"].astype(str).map(lambda s: lm.get(s, lm.get("default", s)))
+        df[label_col] = df[src_col].astype(str).map(lambda s: lm.get(s, lm.get("default", s)))
+        df = df[df[label_col] != "drop"]
     df[label_col] = df[label_col].astype(str)
 
     def _key(v: str):
@@ -268,6 +270,8 @@ def train_classifier(cfg: dict[str, Any], index_csv: Path, out_dir: Path, device
         if ev["macro_recall"] > best:
             best, best_state = ev["macro_recall"], {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
 
+    if best_state is None:  # epochs=0 + init_from: 학습 없이 체크포인트 평가만
+        best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
     model.load_state_dict(best_state)
     out_dir.mkdir(parents=True, exist_ok=True)
     torch.save({"state_dict": best_state, "classes": classes, "cfg": cfg}, out_dir / "model.pt")

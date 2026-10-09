@@ -1,0 +1,24 @@
+# 파각 정도(심각도) 프로토타입 — AI Hub 크랙 소분류를 약한 라벨로 3등급 학습 (코드 가설 기반, 자사 라벨로 재학습 예정)
+# 1 경미: 6 잠재파형, 8 미세 / 2 보통: 2 일자형, 3 원형, 4 위아래, 7 파형 / 3 심각: 1 완전, 5 거미줄형
+name: sev_mono_effb0
+light: MONO
+label_col: sev
+class_filter: ["2/"]
+label_map_col: state_detail
+label_map: {"6": "1", "8": "1", "2": "2", "3": "2", "4": "2", "7": "2", "1": "3", "5": "3", "default": "drop"}
+model: efficientnet_b0
+img_size: 320
+batch: 64
+epochs: 6
+lr: 0.0005
+weight_decay: 0.01
+label_smoothing: 0.05
+loss: weighted_ce
+preprocess: none
+train_cap_per_class: 20000
+val_max: 8000
+test_max: null
+workers: 8
+seed: 42
+group_cols: [washed, breed, region_code]
+index_csv: data/crops/index.csv

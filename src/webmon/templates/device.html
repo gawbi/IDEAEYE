@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>검출기 {{s.device.device_id}}</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>body{font-family:'Malgun Gothic',sans-serif;margin:24px;color:#222}table{border-collapse:collapse}th,td{border:1px solid #ccc;padding:5px 9px;text-align:left}th{background:#f2f2f2}.row{display:flex;gap:24px;flex-wrap:wrap}.card{border:1px solid #ddd;padding:12px 16px;min-width:260px}pre{background:#f7f7f7;padding:8px}</style></head>
+<body>
+<p><a href="/">← 장비 목록</a></p>
+<h2>검출기 {{s.device.device_id}} {{s.device.name}} ({{s.device.site}}) — <span>{{s.device.status}}</span></h2>
+<div class="row">
+ <div class="card"><b>마지막 하트비트</b><br>{% if s.last_heartbeat %}{{s.last_heartbeat.device_ts}} · {{s.last_heartbeat.status}} · {{s.last_heartbeat.fps}} fps · 큐 {{s.last_heartbeat.queue_len}} · {{s.last_heartbeat.temp_c}}℃{% else %}없음{% endif %}</div>
+ <div class="card"><b>설정 v{{s.device.config_version}}</b> · 모델 {{s.device.model_version or '-'}}<pre>{{s.device.config}}</pre></div>
+</div>
+<h3>일별 실적 (최근 {{days}}일)</h3>
+<table><tr><th>날짜</th><th>처리란</th><th>파각란</th><th>파각률</th><th>심각도 1/2/3</th></tr>
+{% for d in s.daily %}<tr><td>{{d.date}}</td><td>{{d.processed}}</td><td>{{d.cracked}}</td><td>{{'%.2f%%' % (100*d.rate)}}</td><td>{{d.severity[0]}}/{{d.severity[1]}}/{{d.severity[2]}}</td></tr>{% endfor %}
+</table>
+<h3>시간별 추이</h3>
+<canvas id="hourly" height="90"></canvas>
+<h3>최근 이벤트</h3>
+<table><tr><th>시각</th><th>유형</th><th>코드</th><th>메시지</th></tr>
+{% for e in s.events %}<tr><td>{{e.ts}}</td><td>{{e.type}}</td><td>{{e.code}}</td><td>{{e.message}}</td></tr>{% endfor %}
+</table>
+<script>
+const H = {{ s.hourly | tojson }};
+new Chart(document.getElementById('hourly'), {type:'bar', data:{labels:H.map(h=>h.hour_ts), datasets:[{label:'처리란',data:H.map(h=>h.processed),backgroundColor:'#9ecae1'},{label:'파각란',data:H.map(h=>h.cracked),backgroundColor:'#e6550d'}]}, options:{responsive:true, scales:{x:{stacked:false}}}});
+</script>
+</body></html>

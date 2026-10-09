@@ -10,6 +10,13 @@ classifier:
 decision:
   crack_threshold: 0.5                 # 운영점: 파각 Recall 목표 기준으로 재설정
   reject_classes: [크랙, 혈반, 이물질, 기형]
+  multiview:                           # 계란 1개를 120° 씩 3회 촬영 → 시점 점수 융합 (src/infer/voting.py)
+    method: hybrid                     # max | mean | kofn | hybrid
+    n_views: 3
+    threshold: 0.5                     # mean/kofn 기준 (실측 데이터로 재설정)
+    high_threshold: 0.9                # hybrid: 한 시점 확정 기준
+    k: 2
+    timeout_s: 2.0                     # 시점이 덜 모인 계란의 판정 대기 시간
 plc:
   backend: mock                        # mock | modbus_tcp
   host: 192.168.0.10

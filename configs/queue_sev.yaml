@@ -1,0 +1,5 @@
+# 파각 정도 프로토타입 (약한 라벨)
+- name: sev_mono
+  cmd: python scripts/train_cls.py --config exp_sev_mono
+- name: collect_all
+  cmd: python scripts/collect_results.py

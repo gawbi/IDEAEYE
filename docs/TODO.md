@@ -14,7 +14,22 @@ Claude 는 깨어날 때마다 이 파일을 읽고 위에서부터 "할 수 있
 - [x] 문서: phase1/3/4/5/6/7, final_summary, reject_policy, RESULTS.md, CLAUDE.md 진행 현황, 검수 폴더 01~08
 - [x] 2026-09-26: 로보플로우 sanity check(AUROC 0.901, 임계값 재조정 필요), 데모 추론 도구(`scripts/demo_infer.py`, 검수/07), 데이터 수집 요청서(`docs/data_collection_request.md`, 검수/08), git 초기화(휴대용 MinGit `C:\tools\mingit`, 사용자 PATH 등록)
 
+## A-2. 2026-10-09 — 기업 정보 반영 후 자율 작업 (기기 영상 입고 전 준비)
+- [x] 현장 정보 정리 `docs/field_info.md` (카메라 ELP IMX678 4K60 화각 94°, Jetson Orin Nano, 카메라 2대×3자리, 120°×3회 촬영, KS B 7956-4 미검출 7%, 종란 검란은 11월, 영상 10/11~, 라벨링 직접)
+- [x] 1. 영상 → 크롭 파이프라인 `scripts/ingest_video.py` (화면 분리, 투광 빛 누적 ROI 자동 검출+k-means 분할, 카메라별 정지 구간, 계란 유무) — 샘플 57초 → 72크롭, 검수/09. AI Hub 모델 zero-shot 은 전부 크랙 판정(0.96) → 무의미, 재학습 필수
+- [x] 2. 라벨링 체계: `docs/labeling_guide.md`, 키보드 도구 `scripts/label_crops.py`, 통합 `scripts/own_build_index.py`(3시점 egg_id 그룹 분할)
+- [x] 4. 3시점 투표 `src/infer/voting.py` (max/mean/kofn/hybrid, 타임아웃, 독립 가정 시뮬레이션: kofn(2) 최종 Recall 95% 에 시점 Recall ≥ 0.88 필요), configs/infer.yaml multiview
+- [x] 3. 파각 정도 프로토타입 `configs/exp_sev_mono.yaml` (AI Hub 소분류 약한 라벨 3등급) — test 정확도 0.820, macro Recall 0.787 (경미 0.62 / 보통 0.85 / 심각 0.89), ±1등급 허용 0.991, 극단 혼동 3~4%. 결론: 심각도 헤드 가능, 자사 severity 라벨로 재학습 필요. 상세 `docs/severity_prototype.md`. (평가 중 DataLoader 워커 페이징 파일 부족으로 멈춤 → workers=4 로 평가 재실행; 이 PC 는 workers ≤ 4 권고)
+- [x] 소프트웨어 아키텍처 구조도 v2 (로고 블록 + 프로토콜 화살표 + 7단계 워크플로, 구현 상태 범례) `검수/10_웹모니터링/architecture.png`, `docs/web_architecture.png`
+- [x] 5. 웹 모니터링: 설계 `docs/web_monitoring_design.md`, 서버 `src/webmon/`(FastAPI+SQLite, KS 송출 CSV, 대시보드), 업로더 `src/telemetry/uploader.py`(집계·오프라인 큐·백오프·설정 폴링), 시뮬레이터 `scripts/simulate_device.py`, 실행법 `docs/webmon_howto.md`. 테스트 6개 통과
+- [x] 6. Jetson 준비 `deploy/jetson/` (ONNX 고정 배치 내보내기, setup/build_trt/bench 스크립트, README)
+- [x] 7. 문서: KS 내부 시험 계획 `docs/ks_test_plan.md`, 데이터 요청서 4-1절 추가(원본 프레임·회전 신호·두 난각색)
+
 ## B. 다음에 Claude 가 할 일 (사용자 결정 후 또는 선택)
+- [ ] (기기 영상 입고 시) ingest_video → 라벨링(팀) → own_build_index → `configs/exp_own_*.yaml` 로 AI Hub 가중치 초기화 미세조정 → 3시점 투표 운영점 → KS 시험 계획으로 평가
+- [ ] (파각 정도 결과 후) 심각도 모델 + 빛샘 영역 물리 지표(길이·면적) 결합 설계
+- [ ] 웹서비스: 로그인, HTTPS, (선택) 이미지 업로드·검토 화면, MQTT 어댑터
+- [ ] 파이프라인에 고정 ROI 모드(검출기 생략) + 3시점 EggAggregator 통합, Jetson 용 TrtClassifier 어댑터
 - [ ] (정책 확정 후) 정책 기준 운영점 최종표 + 판정 규칙을 `configs/infer.yaml decision` 에 반영, 2클래스+33클래스 이중 헤드 파이프라인 어댑터
 - [x] 리사이즈까지 GPU(torch interpolate): 분류 판당 15.3 ms, 판 합계 25.9 ms, 계란당 p50 2.1 ms
 - [x] (선택) YOLO26n 검출기 비교(MONO): mAP@0.5 0.675 vs 0.670, 위치 Recall 0.985 vs 0.984, Precision 0.970 vs 0.956 → 동등(정밀도 소폭 우세, NMS-free)

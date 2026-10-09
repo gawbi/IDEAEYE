@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>파각란검출기 모니터링</title>
+<style>body{font-family:'Malgun Gothic',sans-serif;margin:24px;color:#222}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:6px 10px;text-align:left}th{background:#f2f2f2}.online{color:#1a7f37;font-weight:bold}.offline{color:#b00}.never{color:#888}a{color:#0645ad}</style></head>
+<body>
+<h2>파각란검출기 모니터링 — 장비 목록</h2>
+<p><a href="/api/v1/export/ks">KS 송출 데이터 CSV 내보내기</a> · <a href="/docs">API 문서</a></p>
+<table><tr><th>검출기 번호</th><th>이름</th><th>농장</th><th>상태</th><th>마지막 수신(UTC)</th><th>오늘 처리란</th><th>오늘 파각란</th><th>파각률</th><th>설정 버전</th><th>모델</th></tr>
+{% for d in devices %}
+<tr><td><a href="/devices/{{d.device_id}}">{{d.device_id}}</a></td><td>{{d.name}}</td><td>{{d.site}}</td><td class="{{d.status}}">{{d.status}}</td><td>{{d.last_seen_at or '-'}}</td>
+<td>{{d.today_processed}}</td><td>{{d.today_cracked}}</td><td>{{ '%.1f%%' % (100*d.today_cracked/d.today_processed) if d.today_processed else '-' }}</td><td>v{{d.config_version}}</td><td>{{d.model_version or '-'}}</td></tr>
+{% endfor %}
+</table>
+{% if not devices %}<p>등록된 장비가 없습니다. 관리자 API로 등록하세요 (POST /api/v1/admin/devices).</p>{% endif %}
+</body></html>

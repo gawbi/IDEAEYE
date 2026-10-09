@@ -28,3 +28,4 @@
 | 20260925_221138_cls_mono_crackbin_effb2 | 42 | no-git | NO | acc=0.9298, macro_recall=0.9315, normal_fpr@crack_recall95=0.0894 |
 | 20260925_232710_benchmark_MONO_torch | 0 | no-git | NO | per_egg_ms_p50=2.1400, total_ms_p95=50.5308 |
 | 20260925_233038_benchmark_MONO_torch | 0 | no-git | NO | per_egg_ms_p50=1.8969, total_ms_p95=48.0627 |
+| 20261009_173953_sev_mono_effb0 | 42 | 3c76bd6b47959498d136c5906510f78dc8d8a0ed-dirty | NO | acc=0.8202, macro_recall=0.7870, normal_fpr@crack_recall95=0.5568 |
